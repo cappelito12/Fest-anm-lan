@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Festanmälan</title>
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuk1YAFP8HYAWZZM__HUn5bFFJnrY2PCk",
+            authDomain: "fest-anmalan.firebaseapp.com",
+            projectId: "fest-anmalan",
+            storageBucket: "fest-anmalan.appspot.com",
+            messagingSenderId: "52527448457",
+            appId: "1:52527448457:web:70b5c3cf7ab113fee1a158",
+            measurementId: "G-1THCC62JDS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function registerUser() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+
+            if (name && email) {
+                try {
+                    await addDoc(collection(db, "registrations"), { name, email });
+                    alert("Anmälan lyckades!");
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Något gick fel, försök igen.");
+                }
+            } else {
+                alert("Fyll i alla fält!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Festanmälan</h1>
+    <form onsubmit="registerUser(); return false;">
+        <label for="name">Namn:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">E-post:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="submit">Anmäl</button>
+    </form>
+</body>
+</html>

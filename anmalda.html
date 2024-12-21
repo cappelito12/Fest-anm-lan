@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Anmälda</title>
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuk1YAFP8HYAWZZM__HUn5bFFJnrY2PCk",
+            authDomain: "fest-anmalan.firebaseapp.com",
+            projectId: "fest-anmalan",
+            storageBucket: "fest-anmalan.appspot.com",
+            messagingSenderId: "52527448457",
+            appId: "1:52527448457:web:70b5c3cf7ab113fee1a158",
+            measurementId: "G-1THCC62JDS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchRegistrations() {
+            const registrations = document.getElementById("registrations");
+            registrations.innerHTML = "<li>Hämtar anmälda...</li>";
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "registrations"));
+                registrations.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${data.name} (${data.email})`;
+                    registrations.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error("Error fetching documents: ", error);
+                registrations.innerHTML = "<li>Kunde inte hämta data.</li>";
+            }
+        }
+
+        window.onload = fetchRegistrations;
+    </script>
+</head>
+<body>
+    <h1>Anmälda</h1>
+    <ul id="registrations">
+        <li>Inga anmälda ännu.</li>
+    </ul>
+</body>
+</html>
